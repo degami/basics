@@ -1,6 +1,7 @@
 {
     "name": "degami/basics",
     "homepage": "https://github.com/degami/basics",
+    "description": "a set of reusable code",
 
     "license": "MIT",
     "authors": [
