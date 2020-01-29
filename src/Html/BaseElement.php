@@ -9,7 +9,7 @@
  * @license  MIT https://opensource.org/licenses/mit-license.php
  * @link     https://github.com/degami/sitebase
  */
-namespace Degami\Basics;
+namespace Degami\Basics\Html;
 
 use \Degami\Basics\Traits\ToolsTrait;
 use \Degami\Basics\Exceptions\BasicException;
