@@ -153,7 +153,9 @@ class TagElement extends BaseElement implements TagInterface
      */
     public function renderTag()
     {
-        static::executeAlter("/.*?_before_render_".$this->tag."_alter$/i", [&$this]);
+        if (method_exists($this, 'executeAlter')) {
+            static::executeAlter("/.*?_before_render_".$this->tag."_alter$/i", [&$this]);
+        }
         $reserved_attributes = "";
         foreach ($this->reserved_attributes as $key) {
             if (property_exists(get_class($this), $key)
