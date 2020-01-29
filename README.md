@@ -1,3 +1,3 @@
 # Degami\Basics
 
-a set of reutilizable classes
+a set of reusable code
