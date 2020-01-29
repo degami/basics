@@ -1,0 +1,22 @@
+{
+    "name": "degami/basics",
+    "homepage": "https://github.com/degami/basics",
+
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "degami@github.com",
+            "homepage": "https://github.com/degami/basics"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "autoload": {
+        "files": [
+        ],
+        "psr-4": {
+            "Degami\\Basics\\": "src"
+        }
+    }
+}
