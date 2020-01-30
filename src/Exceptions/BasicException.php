@@ -7,7 +7,7 @@
  * @package  Degami\Basics
  * @author   Mirko De Grandis <degami@github.com>
  * @license  MIT https://opensource.org/licenses/mit-license.php
- * @link     https://github.com/degami/sitebase
+ * @link     https://github.com/degami/basics
  */
 namespace Degami\Basics\Exceptions;
 
