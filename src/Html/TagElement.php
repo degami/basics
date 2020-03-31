@@ -159,7 +159,7 @@ class TagElement extends BaseElement implements TagInterface
         $reserved_attributes = "";
         foreach ($this->reserved_attributes as $key) {
             if (property_exists(get_class($this), $key)
-                && (!empty($this->{$key}) || $key == 'value' && $this->getValueNeeded())
+                && (!empty($this->{$key}) || ($key == 'value' && $this->getValueNeeded()))
             ) {
                 $reserved_attributes .= ' '.$key.'="'.$this->{$key}.'"';
             }
@@ -168,6 +168,27 @@ class TagElement extends BaseElement implements TagInterface
         return "<{$this->tag}{$reserved_attributes}{$attributes}".($this->has_close ? ">" : "/>").
         $this->text.
         ($this->has_close ? $this->renderChildren()."</{$this->tag}>" : "");
+    }
+
+    /**
+     * Adds a list of child to tag
+     *
+     * @param  TagInterface[] $children children to add
+     * @return TagList
+     */
+    public function addChildren($children)
+    {
+        if (!is_array($children)) {
+            $children = [$children];
+        }
+
+        foreach ($children as $child) {
+            if ($child instanceof TagInterface) {
+                $this->addChild($child);
+            }
+        }
+
+        return $this;
     }
 
     /**

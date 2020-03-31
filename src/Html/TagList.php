@@ -52,6 +52,20 @@ class TagList extends BaseElement implements TagInterface
     }
 
     /**
+     * Adds a list of child to tag
+     *
+     * @param  TagInterface[] $children children to add
+     * @return TagList
+     */
+    public function addChildren($children)
+    {
+        foreach ($children as $child) {
+            $this->addChild($child);
+        }
+        return $this;
+    }
+
+    /**
      * Add child to tag
      *
      * @param  TagInterface $child child to add
