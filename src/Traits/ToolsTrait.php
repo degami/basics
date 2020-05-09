@@ -130,4 +130,23 @@ trait ToolsTrait
         // if using PHP < 5.2.5 add extra check of strings for valid UTF-8
         return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     }
+
+    /**
+     * traverse an array trying to find a value
+     *
+     * @return mixed|null
+     * */
+    public static function traverseArray($array, $propertyName)
+    {
+        if (preg_match("/^\[(.*?)\]$/", $propertyName, $matches)) {
+            $propertyName = $matches[1];
+        }
+
+        if (preg_match("/^(.*?)(\[.*?\])$/", $propertyName, $matches)) {
+            $newPropertyName = preg_replace("/\[(.*?)\]\[(.*?)\]/", "\\1[\\2]", $matches[2]);
+            return static::traverseArray($array[$matches[1]], $newPropertyName);
+        }
+
+        return isset($array[$propertyName]) ? $array[$propertyName] : null;
+    }
 }
