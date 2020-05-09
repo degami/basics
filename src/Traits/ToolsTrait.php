@@ -144,6 +144,11 @@ trait ToolsTrait
 
         if (preg_match("/^(.*?)(\[.*?\])$/", $propertyName, $matches)) {
             $newPropertyName = preg_replace("/\[(.*?)\]\[(.*?)\]/", "\\1[\\2]", $matches[2]);
+
+            if (!isset($array[$matches[1]])) {
+                return null;
+            }
+
             return static::traverseArray($array[$matches[1]], $newPropertyName);
         }
 
