@@ -75,18 +75,21 @@ trait ToolsTrait
      * slugify string
      *
      * @param  string $text
+     * @param  boolean $sanitize
      * @return string
      */
-    public function slugify($text)
+    public function slugify($text, $sanitize = true)
     {
         // replace non letter or digits by -
         $text = preg_replace('~[^\pL\d\/]+~u', '-', $text);
 
-        // transliterate
-        $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+        if ($sanitize) {
+            // transliterate
+            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w\/]+~', '', $text);
+            // remove unwanted characters
+            $text = preg_replace('~[^-\w\/]+~', '', $text);
+        }
 
         // trim
         $text = trim($text, '-');
