@@ -22,7 +22,7 @@ use \Degami\Basics\Traits\ToolsTrait;
  *
  * @abstract
  */
-abstract class DataBag implements Iterator, ArrayAccess, Countable
+abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Countable
 {
     use ToolsTrait;
 
@@ -32,13 +32,6 @@ abstract class DataBag implements Iterator, ArrayAccess, Countable
      * @var integer
      */
     protected $position = -1;
-
-    /**
-     * Data to be stored
-     *
-     * @var array
-     */
-    protected $data = [];
 
     /**
      * Prefix for numeric keys
@@ -76,20 +69,11 @@ abstract class DataBag implements Iterator, ArrayAccess, Countable
      */
     public function add($data)
     {
-        if (!is_array($data)) {
-            if (!empty($data)) {
-                $data = [$data];
-            } else {
-                $data = [];
-            }
-        }
-        foreach ($data as $k => $v) {
-            if (is_numeric($k)) {
-                $k = $this->numeric_keys_prefix.$k;
-            }
-            $this->{$k} = $v;
-        }
-        return $this;
+        $data = array_combine(array_map(function($k) {
+            return (is_numeric($k) ? $this->numeric_keys_prefix : '') . $k;
+        }, array_keys($data)), array_values($data));
+
+        return parent::add($data);
     }
 
     /**
@@ -188,54 +172,6 @@ abstract class DataBag implements Iterator, ArrayAccess, Countable
             return false;
         }
         return isset($this->data[ $keys[$this->position] ]);
-    }
-
-    /**
-     * Gets data by key
-     *
-     * @param  string $key key
-     * @return mixed data
-     */
-    public function __get($key)
-    {
-        return $this->data[$key] ?? null;
-    }
-
-    /**
-     * Sets data
-     *
-     * @param  string $key   key
-     * @param  mixed  $value data to set
-     * @return DataBag
-     * @throws BasicException
-     */
-    public function __set($key, $value)
-    {
-        if ($key == 'data' || $key == 'position') {
-            throw new BasicException('Cannot define "'.$key.'" property');
-        }
-        $this->data[$key] = $value;
-        return $this;
-    }
-
-    /**
-     * __isset magic method
-     * @param $name
-     *
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        return isset($this->data[$name]);
-    }
-
-    /**
-     * __unset magic method
-     * @param $name
-     */
-    public function __unset($name)
-    {
-        unset($this->data[$name]);
     }
 
     /**

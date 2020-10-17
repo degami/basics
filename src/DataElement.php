@@ -11,6 +11,7 @@
  */
 namespace Degami\Basics;
 
+use Degami\Basics\Exceptions\BasicException;
 use \Degami\Basics\Traits\ToolsTrait;
 
 /**
@@ -22,14 +23,14 @@ abstract class DataElement
 {
     use ToolsTrait;
 
-    protected $data;
+    protected $data = [];
 
     /**
      * {@inheritdocs}
      */
     public function __get($key)
     {
-        return $this->data[$key];
+        return $this->data[$key] ?? null;
     }
 
     /**
@@ -37,6 +38,10 @@ abstract class DataElement
      */
     public function __set($key, $value)
     {
+        if (property_exists(get_class($this), $key)) {
+            throw new BasicException('Cannot define "'.$key.'" property');
+        }
+
         $this->data[$key] = $value;
         return $this;
     }
@@ -74,7 +79,7 @@ abstract class DataElement
                 // no break
             case 'set':
                 $name = $this->PascalCaseToSnakeCase(trim(strtolower(substr($method, 3))));
-                $this->{$name} = $value;
+                $this->{$name} = reset($args);
                 return $this;
                 // no break
             case 'has':
@@ -85,5 +90,42 @@ abstract class DataElement
                 return false;
         }
         throw new BasicException("Invalid method ".get_class($this)."::".$method."(".print_r($args, 1).")");
+    }
+
+    /**
+     * gets data array
+     *
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * sets data array
+     *
+     * @param mixed $data
+     * @return DataElement
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Adds data to the element
+     *
+     * @param  mixed $data data to add
+     * @return DataElement
+     */
+    public function add($data)
+    {
+        foreach ((array) $data as $k => $v) {
+            $this->{$k} = $v;
+        }
+        return $this;
     }
 }
