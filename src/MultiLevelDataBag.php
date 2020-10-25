@@ -70,11 +70,11 @@ abstract class MultiLevelDataBag extends DataBag
      */
     public function __set($key, $value)
     {
-        if ($key == 'data' || $key == 'position' || $key == 'parent') {
+        if ($key == 'data' || $key == 'databag_current_position' || $key == 'parent') {
             throw new BasicException('Cannot define "'.$key.'" property');
         }
         $this->checkDataArr();
-        $this->data[$key] = (is_array($value)) ? new static($value, $this) : $value;
+        $this->dataelement_data[$key] = (is_array($value)) ? new static($value, $this) : $value;
         $this->notifyChange();
         return $this;
     }

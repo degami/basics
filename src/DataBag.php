@@ -31,7 +31,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @var integer
      */
-    protected $position = -1;
+    protected $databag_current_position = -1;
 
     /**
      * Prefix for numeric keys
@@ -53,11 +53,11 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
         }
 
         unset($options['data']);
-        unset($options['position']);
+        unset($options['databag_current_position']);
 
         $this->setClassProperties($options);
 
-        $this->position = -1;
+        $this->databag_current_position = -1;
         $this->add($data);
     }
 
@@ -104,7 +104,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      */
     public function rewind()
     {
-        $this->position = 0;
+        $this->databag_current_position = 0;
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      */
     private function getKeys()
     {
-        return array_keys($this->data);
+        return array_keys($this->dataelement_data);
     }
 
     /**
@@ -124,7 +124,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      */
     public function getData()
     {
-        return $this->data;
+        return $this->dataelement_data;
     }
 
     /**
@@ -135,10 +135,10 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     public function current()
     {
         $keys = $this->getKeys();
-        if (!isset($keys[$this->position])) {
+        if (!isset($keys[$this->databag_current_position])) {
             return false;
         }
-        return $this->data[ $keys[$this->position] ];
+        return $this->dataelement_data[ $keys[$this->databag_current_position] ];
     }
 
     /**
@@ -149,7 +149,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     public function key()
     {
         $keys = $this->getKeys();
-        return $keys[ $this->position ];
+        return $keys[ $this->databag_current_position ];
     }
 
     /**
@@ -157,7 +157,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      */
     public function next()
     {
-        ++$this->position;
+        ++$this->databag_current_position;
     }
 
     /**
@@ -168,10 +168,10 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     public function valid()
     {
         $keys = $this->getKeys();
-        if (!isset($keys[$this->position])) {
+        if (!isset($keys[$this->databag_current_position])) {
             return false;
         }
-        return isset($this->data[ $keys[$this->position] ]);
+        return isset($this->dataelement_data[ $keys[$this->databag_current_position] ]);
     }
 
     /**
@@ -269,7 +269,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     {
         $out = [];
         $this->checkDataArr();
-        foreach ($this->data as $key => $value) {
+        foreach ($this->dataelement_data as $key => $value) {
             $out[$key] = (is_object($value) && method_exists($value, 'toArray')) ?
                             $value->toArray() :
                             $value;
@@ -304,7 +304,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      */
     public function count()
     {
-        return count($this->data);
+        return count($this->dataelement_data);
     }
 
     /**
@@ -314,11 +314,11 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      */
     protected function checkDataArr()
     {
-        if (!is_array($this->data)) {
-            if (!empty($this->data)) {
-                $this->data = [ '_value0' => $this->data ];
+        if (!is_array($this->dataelement_data)) {
+            if (!empty($this->dataelement_data)) {
+                $this->dataelement_data = [ '_value0' => $this->dataelement_data ];
             } else {
-                $this->data = [];
+                $this->dataelement_data = [];
             }
         }
         return $this;

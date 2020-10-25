@@ -23,14 +23,14 @@ abstract class DataElement
 {
     use ToolsTrait;
 
-    protected $data = [];
+    protected $dataelement_data = [];
 
     /**
      * {@inheritdocs}
      */
     public function __get($key)
     {
-        return $this->data[$key] ?? null;
+        return $this->dataelement_data[$key] ?? null;
     }
 
     /**
@@ -42,7 +42,7 @@ abstract class DataElement
             throw new BasicException('Cannot define "'.$key.'" property');
         }
 
-        $this->data[$key] = $value;
+        $this->dataelement_data[$key] = $value;
         return $this;
     }
 
@@ -51,7 +51,7 @@ abstract class DataElement
      */
     public function __isset($name)
     {
-        return isset($this->data[$name]);
+        return isset($this->dataelement_data[$name]);
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class DataElement
      */
     public function __unset($name)
     {
-        unset($this->data[$name]);
+        unset($this->dataelement_data[$name]);
     }
 
     /**
@@ -84,7 +84,7 @@ abstract class DataElement
                 // no break
             case 'has':
                 $name = $this->PascalCaseToSnakeCase(trim(strtolower(substr($method, 3))));
-                if (array_key_exists($name, $this->data)) {
+                if (array_key_exists($name, $this->dataelement_data)) {
                     return true;
                 }
                 return false;
@@ -99,18 +99,18 @@ abstract class DataElement
      */
     public function getData()
     {
-        return $this->data;
+        return $this->dataelement_data;
     }
 
     /**
      * sets data array
      *
-     * @param mixed $data
+     * @param mixed $dataelement_data
      * @return DataElement
      */
-    public function setData($data)
+    public function setData($dataelement_data)
     {
-        $this->data = $data;
+        $this->dataelement_data = $dataelement_data;
 
         return $this;
     }
