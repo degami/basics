@@ -70,7 +70,7 @@ abstract class MultiLevelDataBag extends DataBag
      */
     public function __set($key, $value)
     {
-        if ($key == 'data' || $key == 'databag_current_position' || $key == 'parent') {
+        if ($key == 'dataelement_data' || $key == 'databag_current_position' || $key == 'parent') {
             throw new BasicException('Cannot define "'.$key.'" property');
         }
         $this->checkDataArr();

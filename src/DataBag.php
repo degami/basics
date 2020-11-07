@@ -52,7 +52,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
             $options = [];
         }
 
-        unset($options['data']);
+        unset($options['dataelement_data']);
         unset($options['databag_current_position']);
 
         $this->setClassProperties($options);
