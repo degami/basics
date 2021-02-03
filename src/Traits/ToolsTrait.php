@@ -84,8 +84,10 @@ trait ToolsTrait
         $text = preg_replace('~[^\pL\d\/]+~u', '-', $text);
 
         if ($sanitize) {
+            $text = mb_convert_encoding($text, 'ascii', 'utf-8');
+
             // transliterate
-            $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+            // $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
             // remove unwanted characters
             $text = preg_replace('~[^-\w\/]+~', '', $text);

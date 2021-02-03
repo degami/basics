@@ -12,7 +12,8 @@
     ],
     "require": {
         "php": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "ext-mbstring": "*"
     },
     "autoload": {
         "files": [
