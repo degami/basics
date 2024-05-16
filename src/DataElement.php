@@ -74,16 +74,16 @@ abstract class DataElement
     {
         switch (strtolower(substr($method, 0, 3))) {
             case 'get':
-                $name = $this->PascalCaseToSnakeCase(trim(strtolower(substr($method, 3))));
+                $name = $this->PascalCaseToSnakeCase(trim(substr($method, 3)));
                 return $this->{$name} ?? null;
                 // no break
             case 'set':
-                $name = $this->PascalCaseToSnakeCase(trim(strtolower(substr($method, 3))));
+                $name = $this->PascalCaseToSnakeCase(trim(substr($method, 3)));
                 $this->{$name} = reset($args);
                 return $this;
                 // no break
             case 'has':
-                $name = $this->PascalCaseToSnakeCase(trim(strtolower(substr($method, 3))));
+                $name = $this->PascalCaseToSnakeCase(trim(substr($method, 3)));
                 if (array_key_exists($name, $this->dataelement_data)) {
                     return true;
                 }
