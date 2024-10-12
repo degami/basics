@@ -25,7 +25,7 @@ abstract class MultiLevelDataBag extends DataBag
      *
      * @var DataBag
      */
-    protected $parent = null;
+    protected ?DataBag $parent = null;
 
     /**
      * Class constructor
@@ -33,7 +33,7 @@ abstract class MultiLevelDataBag extends DataBag
      * @param mixed $data   data to add
      * @param DataBag $parent element parent object
      */
-    public function __construct($data, $parent = null)
+    public function __construct($data, ?DataBag $parent = null)
     {
         $this->parent = $parent;
         parent::__construct($data);
@@ -44,7 +44,7 @@ abstract class MultiLevelDataBag extends DataBag
      *
      * @return \Degami\Basics\DataBag
      */
-    public function getParent()
+    public function getParent() : ?DataBag
     {
         return $this->parent;
     }
@@ -55,7 +55,7 @@ abstract class MultiLevelDataBag extends DataBag
      * @param DataBag $parent
      * @return MultiLevelDataBag
      */
-    public function setParent($parent)
+    public function setParent(?DataBag $parent) : self
     {
         $this->parent = $parent;
         return $this;
@@ -68,7 +68,7 @@ abstract class MultiLevelDataBag extends DataBag
      * @param  mixed  $value data to set
      * @return MultiLevelDataBag
      */
-    public function __set($key, $value)
+    public function __set(string $key, mixed $value) : void
     {
         if ($key == 'dataelement_data' || $key == 'databag_current_position' || $key == 'parent') {
             throw new BasicException('Cannot define "'.$key.'" property');
@@ -76,7 +76,6 @@ abstract class MultiLevelDataBag extends DataBag
         $this->checkDataArr();
         $this->dataelement_data[$key] = (is_array($value)) ? new static($value, $this) : $value;
         $this->notifyChange();
-        return $this;
     }
 
     /**
@@ -84,7 +83,7 @@ abstract class MultiLevelDataBag extends DataBag
      *
      * @param mixed $key key of element to remove
      */
-    public function __unset($key)
+    public function __unset(string $key) : void
     {
         parent::__unset($key);
         $this->notifyChange();
@@ -93,7 +92,7 @@ abstract class MultiLevelDataBag extends DataBag
     /**
      * data change notification on the tree
      */
-    public function notifyChange()
+    public function notifyChange() : void
     {
         if ($this->getParent() instanceof MultiLevelDataBag) {
             $this->getParent()->notifyChange();
@@ -109,7 +108,7 @@ abstract class MultiLevelDataBag extends DataBag
      * @param  string $delimiter delimiter
      * @return boolean
      */
-    public function ensurePath($path, $delimiter = '/')
+    public function ensurePath(string $path, string $delimiter = '/') : bool
     {
         if (!is_string($path) || trim($path) == '') {
             return false;

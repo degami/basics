@@ -13,7 +13,7 @@ namespace Degami\Basics\Html;
 
 use \Degami\Basics\Traits\ToolsTrait;
 use \Degami\Basics\Exceptions\BasicException;
-use \Degami\Basics\ArrayList;
+use Degami\Basics\DataBag;
 
 /**
  * Base element class
@@ -30,7 +30,7 @@ abstract class BaseElement
      *
      * @var array
      */
-    protected $attributes = [];
+    protected array $attributes = [];
 
     /**
      * Set html attributes
@@ -40,7 +40,7 @@ abstract class BaseElement
      *
      * @return BaseElement
      */
-    public function setAttribute($name, $value)
+    public function setAttribute(string $name, string $value) : self
     {
         $this->attributes[$name] = $value;
 
@@ -54,7 +54,7 @@ abstract class BaseElement
      *
      * @return BaseElement
      */
-    public function setAttributesArray($attributes)
+    public function setAttributesArray(array $attributes) : self
     {
         $this->attributes = $attributes;
 
@@ -67,7 +67,7 @@ abstract class BaseElement
      * @param  string $name attribute name
      * @return string       attribute description
      */
-    public function getAttribute($name)
+    public function getAttribute(string $name) : string|false
     {
         return isset($this->attributes[$name]) ? $this->attributes[$name] : false;
     }
@@ -80,7 +80,7 @@ abstract class BaseElement
      *                             array
      * @return string               the html attributes string
      */
-    public function getAttributes($reserved_arr = ['type','name','id','value'])
+    public function getAttributes(array $reserved_arr = ['type','name','id','value']) : string
     {
         return $this->getAttributesString($this->attributes, $reserved_arr);
     }
@@ -94,9 +94,9 @@ abstract class BaseElement
      * @return string                the html attributes string
      */
     public function getAttributesString(
-        $attributes_arr,
-        $reserved_arr = ['type','name','id','value']
-    ) {
+        array $attributes_arr,
+        array $reserved_arr = ['type','name','id','value']
+    ) : string {
         $attributes = '';
         foreach ($reserved_arr as $key => $reserved) {
             if (isset($attributes_arr[$reserved])) {
@@ -122,7 +122,7 @@ abstract class BaseElement
      *
      * @return array attributes array
      */
-    public function getAttributesArray()
+    public function getAttributesArray() : array
     {
         return $this->attributes;
     }
@@ -132,7 +132,7 @@ abstract class BaseElement
      *
      * @return array array representation for the element properties
      */
-    public function toArray()
+    public function toArray() : array
     {
         $values = get_object_vars($this);
         foreach ($values as $key => $val) {
@@ -149,7 +149,7 @@ abstract class BaseElement
      * @param  string $path path
      * @return mixed        element as an array
      */
-    private static function toArrayVal($key, $elem, $path = '/')
+    private static function toArrayVal(mixed $key, mixed $elem, string $path = '/') : mixed
     {
         if ($key === 'parent') {
             return "-- link to parent --";
@@ -157,7 +157,7 @@ abstract class BaseElement
 
         if (is_object($elem) && ($elem instanceof BaseElement)) {
             $elem = $elem->toArray();
-        } elseif (is_object($elem) && ($elem instanceof ArrayList)) {
+        } elseif (is_object($elem) && ($elem instanceof DataBag)) {
             $elem = 'instanceof ['.get_class($elem).']';
         } elseif (is_array($elem)) {
             foreach ($elem as $k => $val) {
@@ -176,7 +176,7 @@ abstract class BaseElement
      * @return mixed
      * @throws BasicException
      */
-    public function __call($method, $args)
+    public function __call(string $method, array $args) : mixed
     {
         switch (strtolower(substr($method, 0, 3))) {
             case 'get':

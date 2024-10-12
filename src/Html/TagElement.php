@@ -22,7 +22,7 @@ class TagElement extends BaseElement implements TagInterface
     use ToolsTrait;
 
     /** @var array tags that do not need to be closed */
-    public static $void_tags = [
+    public static array $void_tags = [
         'area',
         'base',
         'br',
@@ -42,7 +42,7 @@ class TagElement extends BaseElement implements TagInterface
     ];
 
     /** @var array tags that have a value attribute */
-    public static $with_value_tags = [
+    public static array $with_value_tags = [
         'button',
         'input',
         'option',
@@ -51,41 +51,41 @@ class TagElement extends BaseElement implements TagInterface
     ];
 
     /** @var string tag */
-    protected $tag;
+    protected string $tag;
 
     /** @var string input type */
-    protected $type;
+    protected ?string $type;
 
     /** @var string input name */
-    protected $name;
+    protected ?string $name;
 
     /** @var string html id attribute */
-    protected $id;
+    protected ?string $id;
 
     /** @var mixed "value" attribute value */
-    protected $value;
+    protected mixed $value;
 
     /** @var string text */
-    protected $text;
+    protected ?string $text;
 
     /** @var array tag children */
-    protected $children;
+    protected ?array $children;
 
     /** @var array reserved attributes */
-    protected $reserved_attributes = ['type','name', 'id','value'];
+    protected array $reserved_attributes = ['type','name', 'id','value'];
 
     /** @var null|boolean tag needs closing tag */
-    protected $has_close = null;
+    protected ?bool $has_close = null;
 
     /** @var boolean tag needs value attribute */
-    protected $value_needed = true;
+    protected bool $value_needed = true;
 
     /**
      * Class constructor
      *
      * @param array $options build options
      */
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->tag = '';
 
@@ -141,7 +141,7 @@ class TagElement extends BaseElement implements TagInterface
      *
      * @return string css class name
      */
-    public function getElementClassName()
+    public function getElementClassName() : string
     {
         return strtolower($this->tag == 'input' ? $this->type : $this->tag);
     }
@@ -151,7 +151,7 @@ class TagElement extends BaseElement implements TagInterface
      *
      * @return string tag html representation
      */
-    public function renderTag()
+    public function renderTag() : string
     {
         if (method_exists($this, 'executeAlter')) {
             static::executeAlter("/.*?_before_render_".$this->tag."_alter$/i", [&$this]);
@@ -176,7 +176,7 @@ class TagElement extends BaseElement implements TagInterface
      * @param  TagInterface[] $children children to add
      * @return TagList
      */
-    public function addChildren($children)
+    public function addChildren(array $children) : self
     {
         if (!is_array($children)) {
             $children = [$children];
@@ -197,7 +197,7 @@ class TagElement extends BaseElement implements TagInterface
      * @param  TagElement|string $child child to add
      * @return TagElement
      */
-    public function addChild($child)
+    public function addChild(TagElement|string $child) : self
     {
         $this->children[] = $child;
         $this->has_close = true;
@@ -209,7 +209,7 @@ class TagElement extends BaseElement implements TagInterface
      *
      * @return string tag children html representation
      */
-    private function renderChildren()
+    private function renderChildren() : string
     {
         $out = "";
         foreach ($this->children as $key => $value) {
@@ -227,7 +227,7 @@ class TagElement extends BaseElement implements TagInterface
      *
      * @return bool
      */
-    private function getValueNeeded()
+    private function getValueNeeded() : bool
     {
         return $this->value_needed;
     }
@@ -237,7 +237,7 @@ class TagElement extends BaseElement implements TagInterface
      *
      * @return string the tag html
      */
-    public function __toString()
+    public function __toString() : string
     {
         try {
             return $this->renderTag();

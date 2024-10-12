@@ -21,12 +21,12 @@ interface TagInterface
      *
      * @param mixed $child tag to add, can be a tag object or a string
      */
-    public function addChild($child);
+    public function addChild(TagElement|string $child) : self;
 
     /**
      * render tag html
      *
      * @return string tag html
      */
-    public function renderTag();
+    public function renderTag() : string;
 }

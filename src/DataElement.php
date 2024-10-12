@@ -23,41 +23,54 @@ abstract class DataElement
 {
     use ToolsTrait;
 
-    protected $dataelement_data = [];
-
+    protected array $dataelement_data = [];
+    
     /**
-     * {@inheritdocs}
+     * __get
+     *
+     * @param  mixed $key
+     * @return mixed
      */
-    public function __get($key)
+    public function __get(string $key) : mixed
     {
         return $this->dataelement_data[$key] ?? null;
     }
-
+    
     /**
-     * {@inheritdocs}
+     * __set
+     *
+     * @param  mixed $key
+     * @param  mixed $value
+     * @return self
      */
-    public function __set($key, $value)
+    public function __set(string $key, mixed $value) : void
     {
         if (property_exists(get_class($this), $key)) {
             throw new BasicException('Cannot define "'.$key.'" property');
         }
 
         $this->dataelement_data[$key] = $value;
-        return $this;
     }
-
+    
     /**
-     * {@inheritdocs}
+     * __isset
+     *
+     * @param  mixed $name
+     * @return bool
      */
-    public function __isset($name)
+    public function __isset(string $name) : bool
     {
         return isset($this->dataelement_data[$name]);
     }
 
+    
     /**
-     * {@inheritdocs}
+     * __unset
+     *
+     * @param  mixed $name
+     * @return void
      */
-    public function __unset($name)
+    public function __unset(string $name) : void
     {
         unset($this->dataelement_data[$name]);
     }
@@ -69,8 +82,8 @@ abstract class DataElement
      * @param  array  $args
      * @return mixed
      * @throws BasicException
-     */
-    public function __call($method, $args)
+     */    
+    public function __call(string $method, array $args) : mixed
     {
         switch (strtolower(substr($method, 0, 3))) {
             case 'get':
@@ -95,9 +108,9 @@ abstract class DataElement
     /**
      * gets data array
      *
-     * @return mixed
+     * @return array
      */
-    public function getData()
+    public function getData() : array
     {
         return $this->dataelement_data;
     }
@@ -105,10 +118,10 @@ abstract class DataElement
     /**
      * sets data array
      *
-     * @param mixed $dataelement_data
+     * @param array $dataelement_data
      * @return DataElement
      */
-    public function setData($dataelement_data)
+    public function setData(array $dataelement_data) : self
     {
         $this->dataelement_data = $dataelement_data;
 
@@ -118,10 +131,10 @@ abstract class DataElement
     /**
      * Adds data to the element
      *
-     * @param  mixed $data data to add
+     * @param  array $data data to add
      * @return DataElement
      */
-    public function add($data)
+    public function add(array $data) : self
     {
         foreach ((array) $data as $k => $v) {
             $this->{$k} = $v;

@@ -22,14 +22,14 @@ class TagList extends BaseElement implements TagInterface
     use ToolsTrait;
 
     /** @var array tag children */
-    protected $children;
+    protected array $children;
 
     /**
      * Class constructor
      *
      * @param array $options build options
      */
-    public function __construct($options = [])
+    public function __construct(array $options = [])
     {
         $this->children = [];
         $this->setClassProperties($options);
@@ -40,7 +40,7 @@ class TagList extends BaseElement implements TagInterface
      *
      * @return string tag html representation
      */
-    public function renderTag()
+    public function renderTag() : string
     {
         $out = "";
         foreach ($this->children as $key => $value) {
@@ -57,7 +57,7 @@ class TagList extends BaseElement implements TagInterface
      * @param  TagInterface[] $children children to add
      * @return TagList
      */
-    public function addChildren($children)
+    public function addChildren(array $children)
     {
         foreach ($children as $child) {
             $this->addChild($child);
@@ -71,7 +71,7 @@ class TagList extends BaseElement implements TagInterface
      * @param  TagInterface $child child to add
      * @return TagList
      */
-    public function addChild($child)
+    public function addChild(TagElement|string $child) : self
     {
         if ($child instanceof TagInterface) {
             $this->children[] = $child;
@@ -84,7 +84,7 @@ class TagList extends BaseElement implements TagInterface
      *
      * @return string the tag html
      */
-    public function __toString()
+    public function __toString() : string
     {
         try {
             return $this->renderTag();

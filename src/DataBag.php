@@ -31,14 +31,14 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @var integer
      */
-    protected $databag_current_position = -1;
+    protected int $databag_current_position = -1;
 
     /**
      * Prefix for numeric keys
      *
      * @var string
      */
-    protected $numeric_keys_prefix = '_value';
+    protected string $numeric_keys_prefix = '_value';
 
     /**
      * Class constructor
@@ -46,7 +46,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      * @param mixed $data data to add
      * @param array $options construct options
      */
-    public function __construct($data, $options = [])
+    public function __construct(mixed $data, ?array $options = [])
     {
         if ($options == null) {
             $options = [];
@@ -64,10 +64,10 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     /**
      * Adds data to the element
      *
-     * @param  mixed $data data to add
+     * @param  array $data data to add
      * @return DataBag
      */
-    public function add($data)
+    public function add(array $data) : self
     {
         $data = array_combine(array_map(function($k) {
             return (is_numeric($k) ? $this->numeric_keys_prefix : '') . $k;
@@ -82,7 +82,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      * @param  string $key key of data to remove
      * @return DataBag
      */
-    public function delete($key)
+    public function delete(string $key) : self
     {
         $this->offsetUnset($key);
         return $this;
@@ -102,7 +102,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     /**
      * Rewind pointer position
      */
-    public function rewind()
+    public function rewind() : void
     {
         $this->databag_current_position = 0;
     }
@@ -122,7 +122,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return array data
      */
-    public function getData()
+    public function getData() : array
     {
         return $this->dataelement_data;
     }
@@ -132,7 +132,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return mixed current element
      */
-    public function current()
+    public function current() : mixed
     {
         $keys = $this->getKeys();
         if (!isset($keys[$this->databag_current_position])) {
@@ -146,7 +146,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return string key
      */
-    public function key()
+    public function key() : string
     {
         $keys = $this->getKeys();
         return $keys[ $this->databag_current_position ];
@@ -155,7 +155,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     /**
      * Increment current position
      */
-    public function next()
+    public function next() : void
     {
         ++$this->databag_current_position;
     }
@@ -165,7 +165,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return boolean current position is valid
      */
-    public function valid()
+    public function valid() : bool
     {
         $keys = $this->getKeys();
         if (!isset($keys[$this->databag_current_position])) {
@@ -179,7 +179,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return array
      */
-    public function __sleep()
+    public function __sleep() : array
     {
         return ['data'];
     }
@@ -191,7 +191,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return DataBag
      */
-    public static function __set_state($an_array)
+    public static function __set_state($an_array) : DataBag
     {
         $obj = new static($an_array);
         return $obj;
@@ -202,7 +202,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator() : ArrayIterator
     {
         return new ArrayIterator($this);
     }
@@ -212,7 +212,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return array data keys
      */
-    public function keys()
+    public function keys() : array
     {
         return $this->getKeys();
     }
@@ -220,12 +220,12 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
     /**
      * Set data by key
      *
-     * @param string $offset key
+     * @param mixed $offset key
      * @param mixed  $value  data to set
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value) : void
     {
-        return $this->__set($offset, $value);
+        $this->__set($offset, $value);
     }
 
     /**
@@ -234,7 +234,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      * @param  string $offset key to check
      * @return boolean data exists
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset) : bool
     {
         return $this->__isset($offset);
     }
@@ -244,7 +244,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @param string $offset key to delete
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset) : void
     {
         $this->__unset($offset);
     }
@@ -255,7 +255,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      * @param  string $offset key to get
      * @return mixed|null
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset) : mixed
     {
         return $this->__get($offset);
     }
@@ -265,7 +265,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return array
      */
-    public function toArray()
+    public function toArray() : array
     {
         $out = [];
         $this->checkDataArr();
@@ -283,7 +283,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      * @param  array $keys keys to get
      * @return array
      */
-    public function only(array $keys)
+    public function only(array $keys) : array
     {
         $out = [];
         if (empty($keys)) {
@@ -302,7 +302,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return integer
      */
-    public function count()
+    public function count() : int
     {
         return count($this->dataelement_data);
     }
@@ -312,7 +312,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return DataBag
      */
-    protected function checkDataArr()
+    protected function checkDataArr() : self
     {
         if (!is_array($this->dataelement_data)) {
             if (!empty($this->dataelement_data)) {
@@ -329,7 +329,7 @@ abstract class DataBag extends DataElement implements Iterator, ArrayAccess, Cou
      *
      * @return DataBag
      */
-    public function clear()
+    public function clear() : self
     {
         foreach ($this->getKeys() as $key) {
             $this->__unset($key);

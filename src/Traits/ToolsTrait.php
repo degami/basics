@@ -23,7 +23,7 @@ trait ToolsTrait
      *
      * @param array $options values to set
      */
-    private function setClassProperties($options)
+    private function setClassProperties(array $options) : void
     {
         foreach ($options as $name => $value) {
             $name = trim($name);
@@ -39,7 +39,7 @@ trait ToolsTrait
      * @param  mixed $var element to check
      * @return bool
      */
-    public static function isForeacheable($var)
+    public static function isForeacheable(mixed $var) : bool
     {
         return (is_array($var) || ($var instanceof Traversable));
     }
@@ -50,7 +50,7 @@ trait ToolsTrait
      * @param  string
      * @return string
      */
-    public static function snakeCaseToPascalCase($input)
+    public static function snakeCaseToPascalCase(string $input) : string
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $input)));
     }
@@ -61,7 +61,7 @@ trait ToolsTrait
      * @param  string
      * @return string
      */
-    public static function pascalCaseToSnakeCase($input)
+    public static function pascalCaseToSnakeCase(string $input) : string
     {
         preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
         $ret = $matches[0];
@@ -78,7 +78,7 @@ trait ToolsTrait
      * @param  boolean $sanitize
      * @return string
      */
-    public function slugify($text, $sanitize = true)
+    public function slugify(string $text, bool $sanitize = true) : string
     {
         // replace non letter or digits by -
         $text = preg_replace('~[^\pL\d\/]+~u', '-', $text);
@@ -115,7 +115,7 @@ trait ToolsTrait
      * @param  integer $size size in bytes
      * @return string       formatted size
      */
-    public static function formatBytes($size)
+    public static function formatBytes(int $size) : string
     {
         $units = [' B', ' KB', ' MB', ' GB', ' TB'];
         for ($i = 0; $size >= 1024 && $i < 4; $i++) {
@@ -130,7 +130,7 @@ trait ToolsTrait
      * @param  string $text text to encode
      * @return string       plain version of $text
      */
-    public static function processPlain($text)
+    public static function processPlain(string $text) : string
     {
         // if using PHP < 5.2.5 add extra check of strings for valid UTF-8
         return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
@@ -141,7 +141,7 @@ trait ToolsTrait
      *
      * @return mixed|null
      * */
-    public static function traverseArray($array, $propertyName)
+    public static function traverseArray(array $array, string $propertyName) : mixed
     {
         if (preg_match("/^\[(.*?)\]$/", $propertyName, $matches)) {
             $propertyName = $matches[1];
