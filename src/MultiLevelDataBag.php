@@ -64,12 +64,15 @@ abstract class MultiLevelDataBag extends DataBag
     /**
      * Sets data
      *
-     * @param  string $key   key
+     * @param  string|null $key   key
      * @param  mixed  $value data to set
      * @return MultiLevelDataBag
      */
-    public function __set(string $key, mixed $value) : void
+    public function __set(?string $key, mixed $value) : void
     {
+        if (is_null($key)) {
+            $key = time()."_".count($this->dataelement_data);
+        }
         if ($key == 'dataelement_data' || $key == 'databag_current_position' || $key == 'parent') {
             throw new BasicException('Cannot define "'.$key.'" property');
         }
