@@ -159,4 +159,15 @@ trait ToolsTrait
 
         return isset($array[$propertyName]) ? $array[$propertyName] : null;
     }
+
+    public static function getClassBasename(string|object $object_or_namespace) : string
+    {
+        if (is_object($object_or_namespace)) {
+            $class = get_class($object_or_namespace);
+        } else {
+            $class = $object_or_namespace;
+        }
+
+        return basename(str_replace('\\', DIRECTORY_SEPARATOR, $class));
+    }
 }
